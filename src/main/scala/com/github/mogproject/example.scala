@@ -1,11 +1,15 @@
 package com.github.mogproject
 
-import org.openjdk.jmh.annotations.Benchmark
+import org.openjdk.jmh.annotations.{Benchmark, Scope, State}
  
-class ContainsBench {
+@State(Scope.Thread)
+class ContinuallyBench {
+  val xs = List(1, 2, 3, 4)
+
   @Benchmark
-  def setContains(): Unit = (1 to 100000).toSet.contains(100001)
+  def streamContinually(): List[Int] = Stream.continually(xs).flatten.take(10).toList
  
   @Benchmark
-  def listContains(): Unit = (1 to 100000).toList.contains(100001)
+  def iteratorContinually(): List[Int] = Iterator.continually(xs).flatten.take(10).toList
 }
+
